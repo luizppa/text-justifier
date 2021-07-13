@@ -1,8 +1,8 @@
-#include <cstring>
+#include<cstring>
 #include<sstream>
 #include<cmath>
 
-#include"../include/string-utils.hpp"
+#include"../../include/utils/string-utils.hpp"
 
 namespace stringUtils {
 
@@ -31,7 +31,7 @@ namespace stringUtils {
         return whiteSpacePositions;
     }
 
-    std::string expandLine(std::string& input, int targetLength, std::vector<int>& whiteSpacePositions, char fillChar){
+    std::string expandLine(const std::string& input, int targetLength, std::vector<int>& whiteSpacePositions, char fillChar){
         int targetSpacesNumber, spacesMultiplier, whiteSpaces, remainderSpaces;
         std::stringstream outputStream;
 
