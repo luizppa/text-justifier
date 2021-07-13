@@ -7,7 +7,7 @@ class IFormatter {
 
     public:
         virtual ~IFormatter() {}
-        virtual std::string align(const std::string& input) { return input; }
+        virtual std::string align(const std::string& input) = 0;
 
 };
 

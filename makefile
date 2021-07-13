@@ -8,7 +8,7 @@ BUILD_PATH := ./build
 SOURCE_PATH := ./src
 LIB_PATH := ./include
 
-VALGRIND_INPUT := ./input/00.in
+SAMPLE_INPUT := ./input/01.in
 VALGRIND_OUTPUT := ./output/mem.log
 
 TARGET_PATH=$(BUILD_PATH)/$(TARGET_NAME)
@@ -29,7 +29,7 @@ clean:
 	rm -rf $(BUILD_PATH)/*
 
 run:
-	$(TARGET_PATH) < ./input/00.in
+	$(TARGET_PATH) < $(SAMPLE_INPUT)
 	
 mem:
-	valgrind --leak-check=full --show-leak-kinds=all --log-file="$(VALGRIND_OUTPUT)" $(TARGET_PATH) < $(VALGRIND_INPUT)
+	valgrind --leak-check=full --show-leak-kinds=all --log-file="$(VALGRIND_OUTPUT)" $(TARGET_PATH) < $(SAMPLE_INPUT)

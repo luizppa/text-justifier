@@ -34,17 +34,21 @@ int main(){
     std::string input;
     std::stringstream inputStream;
     int targetLength;
+    char mode;
 
-    std::cin >> targetLength;
+    std::cin >> mode >> targetLength;
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-    std::getline(std::cin, input, '\n');
-    justifyParagraph(input, targetLength);
-
-    // while(std::getline(std::cin, input, '\n')){
-    //     inputStream << input << '\n';
-    // }
-    // justifyDocument(inputStream.str(), targetLength);
+    if(mode == 'P'){
+        std::getline(std::cin, input, '\n');
+        justifyParagraph(input, targetLength);
+    }
+    else if(mode == 'D'){
+        while(std::getline(std::cin, input, '\n')){
+            inputStream << input << '\n';
+        }
+        justifyDocument(inputStream.str(), targetLength);
+    }
     
     return 0;
 }
