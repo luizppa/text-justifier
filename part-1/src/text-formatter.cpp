@@ -4,47 +4,56 @@
 #include"../include/text-formatter.hpp"
 #include"../include/string-utils.hpp"
 
-namespace textFormatter {
-    
-    std::string justifyParagraph(const std::string& input, int targetLength){
-        long unsigned int lineStart = 0;
-        std::stringstream outputStream;
+TextFormatter::TextFormatter(){ }
 
-        while(lineStart < input.length()){
-            std::vector<int> whiteSpacePositions = stringUtils::getWhiteSpaces(input, lineStart, targetLength);
-            long unsigned int lineEnd, lineLength;
+TextFormatter::TextFormatter(char fillChar){
+    this->fillChar = fillChar;
+}
 
-            if(input.length() < lineStart + targetLength){ // Last line in paragraph, should not be justified
-                outputStream << input.substr(lineStart);
-                break;
-            }
-            else{
-                if(input.at(lineStart + targetLength) == ' '){ // Line break at optimal length
-                    lineEnd = lineStart + targetLength;
-                    outputStream << input.substr(lineStart, targetLength);
-                    lineStart = lineEnd + 1;
-                }
-                else if(whiteSpacePositions.size() < 2){ // Impossible to justify without word wrap
-                    lineEnd = lineStart + targetLength - 1;
-                    outputStream << input.substr(lineStart, targetLength - 1) << '-';
-                    lineStart = lineEnd;
-                }
-                else { // Expand spaces to justify
-                    lineEnd = whiteSpacePositions.back();
-                    whiteSpacePositions.pop_back();
-                    lineLength = lineEnd - lineStart;
-                    std::string lineSubstring = input.substr(lineStart, lineLength);
+TextFormatter::~TextFormatter(){ }
 
-                    outputStream << stringUtils::expandLine(lineSubstring, targetLength, whiteSpacePositions, FILL_CHAR);
+std::string TextFormatter::justifyParagraph(const std::string& input, int targetLength){
+    long unsigned int lineBegin = 0;
+    std::stringstream outputStream;
 
-                    lineStart = lineEnd + 1;
-                }
-            }
+    while(lineBegin < input.length()){
+        std::vector<int> whiteSpacePositions = stringUtils::getWhiteSpaces(input, lineBegin, targetLength);
+        long unsigned int lineEnd, lineLength;
 
-            outputStream << '\n';
+        // Last line in paragraph, should not be justified
+        if(input.length() < lineBegin + targetLength){
+            outputStream << input.substr(lineBegin);
+            break;
         }
 
-        return outputStream.str();
+        // Line break at optimal length
+        else if(input.at(lineBegin + targetLength) == ' '){
+            lineEnd = lineBegin + targetLength;
+            outputStream << input.substr(lineBegin, targetLength);
+            lineBegin = lineEnd + 1;
+        }
+
+        // Impossible to justify without word wrap
+        else if(whiteSpacePositions.size() < 2){
+            lineEnd = lineBegin + targetLength - 1;
+            outputStream << input.substr(lineBegin, targetLength - 1) << '-';
+            lineBegin = lineEnd;
+        }
+
+        // Expand spaces to justify
+        else {
+            lineEnd = whiteSpacePositions.back();
+            whiteSpacePositions.pop_back();
+            lineLength = lineEnd - lineBegin;
+            std::string lineSubstring = input.substr(lineBegin, lineLength);
+
+            outputStream << stringUtils::expandLine(lineSubstring, targetLength, whiteSpacePositions, this->fillChar);
+
+            lineBegin = lineEnd + 1;
+        }
+
+        outputStream << '\n';
     }
 
+    return outputStream.str();
 }
